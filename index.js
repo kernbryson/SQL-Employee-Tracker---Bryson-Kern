@@ -38,6 +38,8 @@ function startPrompt() {
         case "view all roles":
           RoleView();
           break;
+          employeeView();
+          break;
         case "exit":
           exit();
           break;
@@ -72,3 +74,14 @@ function RoleView() {
     startPrompt();
   });
 }
+function employeeView() {
+    const query = `SELECT role.title AS TITLE, role.salary AS SALARY, role.id AS ROLE_ID FROM role;`;
+    connection.query(query, (err, res) => {
+      if (err) throw err;
+      console.log("\n");
+      console.log("ROLES");
+      console.log("\n");
+      console.table(res);
+      startPrompt();
+    });
+  }
