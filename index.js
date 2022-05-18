@@ -26,6 +26,7 @@ function startPrompt() {
           "add a role",
           "add an employee",
           "update an employee role",
+          "exit",
         ],
       },
     ])
@@ -37,13 +38,20 @@ function startPrompt() {
         case "view all roles":
           RoleView();
           break;
+        case "exit":
+          exit();
+          break;
         default:
-          buildTeam();
+          departmentView();
       }
     });
 }
+function exit() {
+  console.log("Thank you for using employee tracker!");
+  process.exit();
+}
 function departmentView() {
-  const query = `SELECT * FROM employees.department;`;
+  const query = `SELECT department.name AS DEPARTMENT, department.id AS DEPARTMENT_ID FROM department;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
     console.log("\n");
@@ -54,7 +62,7 @@ function departmentView() {
   });
 }
 function RoleView() {
-  const query = `SELECT * FROM employees.role;`;
+  const query = `SELECT role.title AS TITLE, role.salary AS SALARY, role.id AS ROLE_ID FROM role;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
     console.log("\n");
