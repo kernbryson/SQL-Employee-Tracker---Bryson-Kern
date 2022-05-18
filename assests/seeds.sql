@@ -10,3 +10,4 @@ VALUES
 ('Engineer'),
 ('Finance'),
 ('Legal');
+INSERT INTO employees ()
