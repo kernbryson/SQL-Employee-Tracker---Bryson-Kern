@@ -9,16 +9,17 @@ VALUES
 ('Sales'),
 ('Engineer'),
 ('Finance'),
-('Legal');
-INSERT INTO employees (first_name, last_name, manager_id)
+('Legal'),
+('Manager');
+INSERT INTO employees (first_name, last_name, id, manager_id)
 VALUES
-('Bryson','Kern', NULL),
-('Eric','Reyes', NULL),
-('Jake','Smith', NULL),
-('Cayla','Montry', 2),
-('Duke','Tomb', NULL),
-('Alexa','Marks', 6),
-('Katie','Builder', NULL),
-('Diasey','Holcomb', NULL),
-('Matt','Schump', 5);
+('Bryson','Kern', 1, NULL),
+('Eric','Reyes', 2, NULL),
+('Jake','Smith', 3, NULL),
+('Cayla','Montry', 4, 2),
+('Duke','Tomb', 5, NULL),
+('Alexa','Marks', 6, 6),
+('Katie','Builder', 7, NULL),
+('Diasey','Holcomb', 8, NULL),
+('Matt','Schump', 9, 5);
 

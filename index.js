@@ -38,7 +38,11 @@ function startPrompt() {
         case "view all roles":
           RoleView();
           break;
+        case "view all employees":
           employeeView();
+          break;
+        case "add a department":
+          addDepartment();
           break;
         case "exit":
           exit();
@@ -75,13 +79,59 @@ function RoleView() {
   });
 }
 function employeeView() {
-    const query = `SELECT role.title AS TITLE, role.salary AS SALARY, role.id AS ROLE_ID FROM role;`;
-    connection.query(query, (err, res) => {
-      if (err) throw err;
-      console.log("\n");
-      console.log("ROLES");
-      console.log("\n");
-      console.table(res);
-      startPrompt();
+  const query = `SELECT role.title AS TITLE, role.salary AS SALARY, role.id AS ROLE_ID FROM role;`;
+  connection.query(query, (err, res) => {
+    if (err) throw err;
+    console.log("\n");
+    console.log("ROLES");
+    console.log("\n");
+    console.table(res);
+    startPrompt();
+  });
+}
+
+function addDepartment() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "newDepartment",
+        message: "What department would you like to add?",
+      },
+    ])
+    .then((data) => {
+      let newDept = data.newDepartment;
+      const query = `INSERT INTO department (name) VALUES ('${newDept}');`;
+      connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.log(
+          "\x1b[32m",
+          "Successfully added " + newDept + " department!"
+        );
+        startPrompt();
+      });
     });
+}
+
+function addRole() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "newDepartment",
+          message: "What department would you like to add?",
+        },
+      ])
+      .then((data) => {
+        let newDept = data.newDepartment;
+        const query = `INSERT INTO department (name) VALUES ('${newDept}');`;
+        connection.query(query, (err, res) => {
+          if (err) throw err;
+          console.log(
+            "\x1b[32m",
+            "Successfully added " + newDept + " department!"
+          );
+          startPrompt();
+        });
+      });
   }
