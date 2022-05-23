@@ -92,6 +92,9 @@ function startPrompt() {
         case "add an employee":
           addEmployee();
           break;
+          case "Update an employee":
+          updateEmployee();
+          break;
         case "exit":
           exit();
           break;
@@ -127,7 +130,12 @@ function RoleView() {
   });
 }
 function employeeView() {
-  const query = `SELECT * FROM employees JOIN role ON role.id = employees.role_id;`;
+  const query = `SELECT employees.first_name AS FIRST_NAME, employees.last_name AS LAST_NAME, employees.id, role.title, department.name AS DEPARTMENT, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS MANAGER
+  FROM employees
+  LEFT JOIN employees manager on manager.id = employees.manager_id
+  INNER JOIN role ON (role.id = employees.role_id)
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY employees.id;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
     console.log("\n");
@@ -191,37 +199,105 @@ function addRole() {
       });
     });
 }
-function addEmployee() {
-  inquirer
+
+async function addEmployee() {
+  const addname = await inquirer.prompt(createNewName());
+  connection.query('SELECT role.id, role.title FROM role ORDER BY role.id;', async (err, res) => {
+      if (err) throw err;
+      const { role } = await inquirer.prompt([
+          {
+              name: 'role',
+              type: 'list',
+              choices: () => res.map(res => res.title),
+              message: 'What is the employee role?: '
+          }
+      ]);
+      let roleId;
+      for (const row of res) {
+          if (row.title === role) {
+              roleId = row.id;
+              continue;
+          }
+      }
+      connection.query('SELECT * FROM employees', async (err, res) => {
+          if (err) throw err;
+          let choices = res.map(res => `${res.first_name} ${res.last_name}`);
+          choices.push('none');
+          let { manager } = await inquirer.prompt([
+              {
+                  name: 'manager',
+                  type: 'list',
+                  choices: choices,
+                  message: 'Choose the employee Manager: '
+              }
+          ]);
+          let managerId;
+          let managerName;
+          if (manager === 'none') {
+              managerId = null;
+          } else {
+              for (const data of res) {
+                  data.fullName = `${data.first_name} ${data.last_name}`;
+                  if (data.fullName === manager) {
+                      managerId = data.id;
+                      managerName = data.fullName;
+                      console.log(managerId);
+                      console.log(managerName);
+                      continue;
+                  }
+              }
+          }
+          console.log( "\x1b[32m",'Employee has successfully been added!');
+          connection.query(
+              'INSERT INTO employees SET ?',
+              {
+                  first_name: addname.first,
+                  last_name: addname.last,
+                  role_id: roleId,
+                  manager_id: parseInt(managerId)
+              },
+              (err, res) => {
+                  if (err) throw err;
+                  startPrompt();
+
+              }
+          );
+      });
+  });
+
+}
+function createNewName() {
+  return ([
+      {
+          name: "first",
+          type: "input",
+          message: "Enter the employees first name: "
+      },
+      {
+          name: "last",
+          type: "input",
+          message: "Enter the employees last name: "
+      }
+  ]);
+}
+function updateEmployee(){
+  connection.query('SELECT role.id, role.title FROM role ORDER BY role.id;', async (err, res) => {
+    if (err) throw err;
+    inquirer
     .prompt([
       {
         type: "input",
-        name: "newFirstName",
-        message: "What is the employees first name?",
-      },
-      {
-        type: "input",
-        name: "newLastName",
-        message: "What is the employees last name?",
+        name: "employeeId",
+        message: "What is the employees ID?",
       },
       {
         type: "list",
-        name: "newEmployeeRole",
-        message: "What is the employees role?",
-        choices: roleArrayRole,
-      },
-      {
-        type: "list",
-        name: "newEmployeeManager",
-        message: "Who is the employees manager?",
-        choices: managerArrayManager,
+        name: "updateRole",
+        message: "What is employees new role?",
+        choices:  () => res.map(res => res.title),
       },
     ])
-    .then((data) => {
-      connection.query(query, (err, res) => {
-        if (err) throw err;
-        let randomID = Math.random() * 2;
-        const query = `INSERT INTO employees (first_name, last_name, id, manager_id, role_id) VALUES ('${newFirstName}','${newLastName}', ${randomID};`;
-      });
-    });
+  
+  })
+ 
 }
