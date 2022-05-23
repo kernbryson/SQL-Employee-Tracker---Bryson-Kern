@@ -82,11 +82,11 @@ function RoleView() {
   });
 }
 function employeeView() {
-  const query = `SELECT employees.first_name AS FIRST_NAME, employees.last_name AS LAST_NAME, employees.id AS EMPLOYEE_ID, employees.manager_id AS MANAGER_ID FROM employees;`;
+  const query = `SELECT * FROM employees JOIN role ON role.id = employees.role_id;`;
   connection.query(query, (err, res) => {
     if (err) throw err;
     console.log("\n");
-    console.log("ROLES");
+    console.log("EMPLOYEES");
     console.log("\n");
     console.table(res);
     startPrompt();
