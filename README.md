@@ -21,6 +21,7 @@ In order to use this project one must first clone my github repo. Next the user 
 ## Usage
 
 Using this website is very simple. first off the user will need to type node index.js in the command line to start the application. Then the user can user the arrow keys to pick what they want to do by clicking the enter button.
+![code](/images/example.png)
 
 ## Credits
 
