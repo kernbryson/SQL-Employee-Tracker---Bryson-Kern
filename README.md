@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+https://www.youtube.com/watch?v=4ol1Szv7NXQ
+
 ## Description
 
 For this project I created an employee tracker that holds employee's, job titles, salaries, and departments. My motivation for creating this project was to make keeping track of your employee's simple and concise. This website accepts user input to add employees, departments, and roles. At any time you are also able to view your roster of employees in a multitude of formats.
