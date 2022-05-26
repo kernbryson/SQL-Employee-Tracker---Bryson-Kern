@@ -138,32 +138,51 @@ function addDepartment() {
 }
 //creates new role
 function addRole() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "newTitle",
-        message: "What is the roles title?",
-      },
-      {
-        type: "input",
-        name: "newSalary",
-        message: "What is the roles salary?",
-      },
-    ])
-    .then((data) => {
-      let newTitle = data.newTitle;
-      let newSalary = data.newSalary;
-      const query = `INSERT INTO role (title, salary) VALUES ('${newTitle}',${newSalary});`;
-      connection.query(query, (err, res) => {
-        if (err) throw err;
-        console.log(
-          "\x1b[32m",
-          "Successfully added " + newTitle + " to roles!"
-        );
-        startPrompt();
-      });
+  connection.query(
+    "SELECT department.id, department.name FROM department ORDER BY department.id;",
+    async (err, res) => {
+     
+      await inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "newTitle",
+            message: "What is the roles title?",
+          },
+          {
+            type: "input",
+            name: "newSalary",
+            message: "What is the roles salary?",
+          },
+          {
+            type: "list",
+            name: "whatDepartment",
+            message: "What department does this role go under?",
+            choices: () => res.map((res) => res.name),
+          },
+        ])
+        .then((data) => {
+          let deparmentId = ''
+          for (const row of res) {
+          if (row.name === data.whatDepartment) {
+            departmentId = row.id;
+            
+          }}
+          let newTitle = data.newTitle;
+          let newSalary = data.newSalary;
+          const query = `INSERT INTO role (title, salary, department_id) VALUES ('${newTitle}',${newSalary}, ${departmentId});`;
+         
+          connection.query(query, (err, res) => {
+            if (err) throw err;
+            console.log(
+              "\x1b[32m",
+              "Successfully added " + newTitle + " to roles!"
+            );
+            startPrompt();
+          });
     });
+    }
+  );
 }
 //used for add employee, gathers the employees name
 function createNewName() {
@@ -216,7 +235,7 @@ async function addEmployee() {
         ]);
         let managerId = "";
         let managerName = "";
-        
+
         if (manager === "none") {
           managerId = null;
         } else {
@@ -231,7 +250,7 @@ async function addEmployee() {
             }
           }
         }
-        console.log("\x1b[32m","Employee has successfully been added!");
+        console.log("\x1b[32m", "Employee has successfully been added!");
         connection.query(
           "INSERT INTO employees SET ?",
           {
