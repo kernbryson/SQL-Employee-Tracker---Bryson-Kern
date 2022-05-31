@@ -249,6 +249,23 @@ async function addEmployee() {
           }
         }
         console.log("\x1b[32m", "Employee has successfully been added!");
+        if(manager === "none"){
+          connection.query(
+            "INSERT INTO employees SET ?",
+            {
+              first_name: addname.first,
+              last_name: addname.last,
+              role_id: roleId,
+              manager_id: managerId
+            },
+            (err, res) => {
+              if (err) throw err;
+              startPrompt();
+            }
+          );
+
+
+        } else{
         connection.query(
           "INSERT INTO employees SET ?",
           {
@@ -261,7 +278,7 @@ async function addEmployee() {
             if (err) throw err;
             startPrompt();
           }
-        );
+        )};
       });
     }
   );
