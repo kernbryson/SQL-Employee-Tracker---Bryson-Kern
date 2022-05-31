@@ -184,24 +184,22 @@ function addRole() {
     }
   );
 }
-//used for add employee, gathers the employees name
-function createNewName() {
-  return [
-    {
-      name: "first",
-      type: "input",
-      message: "Enter the employees first name: ",
-    },
-    {
-      name: "last",
-      type: "input",
-      message: "Enter the employees last name: ",
-    },
-  ];
-}
+
 //adds an employee
 async function addEmployee() {
-  const addname = await inquirer.prompt(createNewName());
+  const addname = await inquirer.prompt(
+    [
+      {
+        name: "first",
+        type: "input",
+        message: "Enter the employees first name: ",
+      },
+      {
+        name: "last",
+        type: "input",
+        message: "Enter the employees last name: ",
+      },
+    ]);
   connection.query(
     "SELECT role.id, role.title FROM role ORDER BY role.id;",
     async (err, res) => {
