@@ -272,9 +272,9 @@ async function addEmployee() {
 function updateEmployee() {
   connection.query(
     "SELECT role.id, role.title FROM role ORDER BY role.id;",
-    async (err, res) => {
+     (err, res) => {
       if (err) throw err;
-      await inquirer
+       inquirer
         .prompt([
           {
             type: "input",
@@ -298,7 +298,7 @@ function updateEmployee() {
           }
           connection.query(
             `UPDATE employees SET role_id = ${roleId} WHERE employees.id = ${answers.employeeId}`,
-            async (err, res) => {
+             (err, res) => {
               if (err) throw err;
               console.log("\x1b[32m", "Successfully updated employee");
               startPrompt();
