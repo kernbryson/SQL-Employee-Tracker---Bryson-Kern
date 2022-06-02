@@ -43,5 +43,5 @@ Using this website is very simple. first off the user will need to type node ind
 
 Feel free to contact me with any questions or concerns!
 
-- email: kernbryson@yahoo.com
+- Email: kernbryson@yahoo.com
 - GitHub: https://github.com/kernbryson

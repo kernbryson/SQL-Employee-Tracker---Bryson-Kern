@@ -221,13 +221,13 @@ async function addEmployee() {
       }
       connection.query("SELECT * FROM employees", async (err, res) => {
         if (err) throw err;
-        let choices = res.map((res) => `${res.first_name} ${res.last_name}`);
+        let answerChoices = res.map((res) => `${res.first_name} ${res.last_name}`);
         choices.push("none");
         let { manager } = await inquirer.prompt([
           {
             name: "manager",
             type: "list",
-            choices: choices,
+            choices: answerChoices,
             message: "Choose the employee Manager: ",
           },
         ]);
